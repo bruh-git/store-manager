@@ -19,5 +19,6 @@ app.use(errorMiddleware);
 
 app.get('/products', rescue(Product.getAll));
 app.get('/products/:id', rescue(Product.findById));
+app.post('/products', rescue(Product.createProduct));
 
 module.exports = app;
