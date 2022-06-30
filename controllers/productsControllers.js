@@ -7,14 +7,12 @@ const getAll = async (_req, res) => {
   return res.status(200).json(product);
 };
 
-const findById = async (req, res, next) => {
+const findById = async (req, res, _next) => {
   const { id } = req.params;
 
   const product = await Product.findById(id);
-
-  if (product.error) return next(product.error);
-
-  return res.status(200).json(product);
+  if (product) return res.status(200).json(product);
+  res.status(404).json({ message: 'Product not found' });
 };
 
 const createProduct = async (req, res, next) => {

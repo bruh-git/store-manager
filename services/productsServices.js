@@ -4,16 +4,14 @@ const getAll = async () => Product.getAll();
 
 const findById = async (productId) => {
   const product = await Product.getByProductId(productId);
-
-  if (!product) {
+/*   if (!product) {
     return {
       error: {
         code: 'notFound',
         message: 'Product not found',
       },
     };
-  }
-
+  } */
   return product;
 };
 
