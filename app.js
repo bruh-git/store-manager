@@ -4,7 +4,7 @@ const rescue = require('express-rescue');
 
 const app = express();
 const Product = require('./controllers/productsControllers');
-const errorMiddleware = require('./middlewares/error');
+/* const errorMiddleware = require('./middlewares/error'); */
 
 // não remova esse endpoint, é para o avaliador funcionar
 app.get('/', (_request, response) => {
@@ -15,7 +15,7 @@ app.get('/', (_request, response) => {
 // você deve usar o arquivo index.js para executar sua aplicação 
 
 app.use(bodyParser.json());
-app.use(errorMiddleware);
+/* app.use(errorMiddleware); */
 
 app.get('/products', rescue(Product.getAll));
 app.get('/products/:id', rescue(Product.findById));
