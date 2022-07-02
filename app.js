@@ -1,9 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const rescue = require('express-rescue');
-
+/* const rescue = require('express-rescue'); */
 const app = express();
-const Product = require('./controllers/productsControllers');
+app.use(bodyParser.json());
+
+const productsRouter = require('./routes/productsRouter');
 /* const errorMiddleware = require('./middlewares/error'); */
 
 // não remova esse endpoint, é para o avaliador funcionar
@@ -14,12 +15,16 @@ app.get('/', (_request, response) => {
 // você pode registrar suas rotas normalmente, como o exemplo acima
 // você deve usar o arquivo index.js para executar sua aplicação 
 
-app.use(bodyParser.json());
-/* app.use(errorMiddleware); */
+app.use('/products', productsRouter);
 
-app.get('/products', rescue(Product.getAll));
-app.get('/products/:id', rescue(Product.findById));
-app.post('/products', rescue(Product.createProduct));
-app.delete('/products/:id', rescue(Product.remove));
+app.use((err, _req, res, _next) => {
+  switch (err.name) {
+    case 'UnprocessableEntity': res.status(422).json({ message: err.message }); break;
+    case 'ValidationError': res.status(400).json({ message: err.message }); break;
+    case 'NotFoundError': res.status(404).json({ message: err.message });
+    break;
+    default: res.sendStatus(500);
+  }
+});
 
 module.exports = app;

@@ -1,12 +1,64 @@
 const Joi = require('joi');
-const NotFoundError = require('../middlewares/error');
-const { runSchema } = require('./validators'); 
-const Product = require('../models/productsModels');
+/* const NotFoundError = require('../middlewares/error'); */
+/* const { runSchema } = require('./validators'); */
+const productModel = require('../models/productsModels');
 
-const getAll = async () => Product.getAll();
+const productService = {
+  validateParamsId: (params) => {
+    const schema = Joi.object({
+      id: Joi.number().required(),
+    });
 
+    const { error, value } = schema.validate(params);
+
+    if (error) throw error;
+
+    return value;
+  },
+
+  validateBody: async (params) => {
+    const schema = Joi.object({
+      name: Joi.string()
+        .required().min(5).not()
+        .empty(),
+    });
+    const { error, value } = schema.validate(params);
+    if (error) throw error;
+
+    return value;
+  },
+
+  create: async ({ name }) => {
+    const id = await productModel.create({ name });
+    return id;
+  },
+
+  list: async () => {
+    const products = await productModel.list();
+    return products;
+  },
+  
+  findById: async (id) => {
+    const product = await productModel.findById(id);
+    return product;
+  },
+  checkIfExists: async (name) => {
+    const exists = await productModel.checkIfExists(name);
+    if (exists) {
+      /* throw new Error(); */
+      return {
+        error: {
+          code: 'Unprocessable Entity',
+          message: 'Product already exists',
+        },
+      };
+    }
+  },
+};
+
+/* 
 const findById = async (productId) => {
-  const product = await Product.getByProductId(productId);
+  const product = await Product.getByProductId(productId); */
 /*   if (!product) {
     return {
       error: {
@@ -15,8 +67,8 @@ const findById = async (productId) => {
       },
     };
   } */
-  return product;
-};
+/*   return product;
+}; */
 
 /*   const { error } = Joi.object({
     name: Joi.string()
@@ -32,7 +84,7 @@ const findById = async (productId) => {
   } */
 /*   if (error) return next(error); */
 
-const checkIfExists = async (name) => {
+/* const checkIfExists = async (name) => {
   const exists = await Product.checkIfExists(name);
   if (exists) {
     return {
@@ -48,7 +100,7 @@ const checkIfExistsId = async (id) => {
   const exists = await Product.checkIfExistsId(id);
   if (!exists) {
     throw new NotFoundError('Product not found');
-  }
+  } */
 /*   if (exists) {
     return {
       error: {
@@ -57,9 +109,9 @@ const checkIfExistsId = async (id) => {
       },
     };
   } */
-};
+/* }; */
 
-const validate = async (data) => {
+/* const validate = async (data) => {
   const schema = Joi.object({
     name: Joi.string().min(5).required() });
   const { error } = schema.validate(data);
@@ -70,30 +122,9 @@ const validate = async (data) => {
   }
 };
 
-const movieService = {
-  validateParamsId: runSchema(Joi.object({
-    id: Joi.number().required().positive().integer(),
-  })),
-};
-
-const createProduct = async (name) => {
-  const newProduct = await Product.create(name);
-
-  return newProduct;
-};
-
 const remove = async (id) => {
   const exists = await Product.checkIfExistsId(id);
   await Product.remove(exists);
-};
+}; */
 
-module.exports = {
-  getAll,
-  findById,
-  createProduct,
-  checkIfExists,
-  validate,
-  remove,
-  movieService,
-  checkIfExistsId,
-};
+module.exports = productService;
