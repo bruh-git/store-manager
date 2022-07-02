@@ -1,9 +1,20 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
-const connection = require('../../models/connection');
-const productsModels = require('../../models/productsModels');
+const connection = require('../../../models/connection');
+const productsModels = require('../../../models/productsModels');
 
-describe('Insere um novo produto no BD', () => {
+describe('Products,', () => {
+  describe('#create',() => {
+    it('ao enviar um obj com o atributo name deve salvar os dados e retornar o id', async () => {
+      const expecteId = 1
+      sinon.stub(connection, 'execute').resolves([{ insertId: expecteId }]);
+      const id = await productsModels.create({ name: 'Arco' });
+      expect(id).to.be.eq(expecteId)
+    })
+  })
+});
+
+/* describe('Insere um novo produto no BD', () => {
   const payloadMovie = {
     name: 'Example Product',
   };
@@ -54,13 +65,13 @@ describe('Insere um novo produto no BD', () => {
     });
   });
 
-  /*   describe('#edit', function () {
+  describe('#edit', function () {
       it('deve ser capaz de editar se mandar um id e um objeto', async function () {
         sinon.stub(connection, 'query').resolves([{ affectedRows: 1 }]);
         const value = await productsModels.edit(1, { name: 'Quentin Tarantino' });
         expect(value).to.be.eq(true);
       });
-    }); */
+    });
 
   describe('Busca apenas um filme no BD por seu ID', () => {
     before(async () => {
@@ -116,4 +127,4 @@ describe('Insere um novo produto no BD', () => {
     });
   });
 
-});
+}); */

@@ -1,12 +1,14 @@
 const connection = require('./connection');
 
+const create = async ({ name }) => {
+  const sql = 'INSERT INTO StoreManager.products (name) VALUES (?)';
+  const [{ insertId }] = await connection.execute(sql, [name]);
+  return insertId;
+};
 const getAll = async () => {
   const query = 'SELECT * FROM StoreManager.products;';
   const [rows] = await connection.execute(query);
-/*   return products.map(({ id, name }) => ({
-    id,
-    name,
-  })); */
+
   return rows;
 };
 
@@ -14,10 +16,6 @@ const getByProductId = async (productId) => {
   const query = 'SELECT * FROM StoreManager.products WHERE id= ?;';
   const [[product]] = await connection.execute(query, [productId]);
 
-/*   return product.map(({ id, name }) => ({
-    id,
-    name,
-  })); */
   return product;
 };
 
@@ -27,15 +25,35 @@ const checkIfExists = async (name) => {
   return !!item;
 };
 
-const createProduct = async (name) => {
-  const sql = 'INSERT INTO StoreManager.products (name) VALUES (?)';
-  const [{ insertId }] = await connection.execute(sql, [name]);
-  return insertId;
+const checkIfExistsId = async (id) => {
+  const sql = 'SELECT * FROM StoreManager.products WHERE id = ?';
+  const [[item]] = await connection.execute(sql, [id]);
+  return !!item;
+};
+
+const remove = async (id) => {
+  const sql = `
+      DELETE FROM StoreManager.products
+      WHERE id = ?
+    `;
+  await connection.query(sql, [id]);
+};
+
+const edit = async (id, changes) => {
+  const sql = `
+      UPDATE StoreManager.products
+      SET ? 
+      WHERE id = ?
+    `;
+  await connection.query(sql, [changes, id]);
 };
 
 module.exports = {
   getAll,
   getByProductId,
-  createProduct,
+  create,
   checkIfExists,
+  checkIfExistsId,
+  remove,
+  edit,
 };

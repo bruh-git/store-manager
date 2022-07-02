@@ -1,5 +1,6 @@
 const Joi = require('joi');
-/* const { runSchema } = require('./validators');  */
+const NotFoundError = require('../middlewares/error');
+const { runSchema } = require('./validators'); 
 const Product = require('../models/productsModels');
 
 const getAll = async () => Product.getAll();
@@ -43,6 +44,21 @@ const checkIfExists = async (name) => {
   }
 };
 
+const checkIfExistsId = async (id) => {
+  const exists = await Product.checkIfExistsId(id);
+  if (!exists) {
+    throw new NotFoundError('Product not found');
+  }
+/*   if (exists) {
+    return {
+      error: {
+        code: 'notFound',
+        message: 'Product not found',
+      },
+    };
+  } */
+};
+
 const validate = async (data) => {
   const schema = Joi.object({
     name: Joi.string().min(5).required() });
@@ -54,10 +70,21 @@ const validate = async (data) => {
   }
 };
 
+const movieService = {
+  validateParamsId: runSchema(Joi.object({
+    id: Joi.number().required().positive().integer(),
+  })),
+};
+
 const createProduct = async (name) => {
-  const newProduct = await Product.createProduct(name);
+  const newProduct = await Product.create(name);
 
   return newProduct;
+};
+
+const remove = async (id) => {
+  const exists = await Product.checkIfExistsId(id);
+  await Product.remove(exists);
 };
 
 module.exports = {
@@ -66,4 +93,7 @@ module.exports = {
   createProduct,
   checkIfExists,
   validate,
+  remove,
+  movieService,
+  checkIfExistsId,
 };

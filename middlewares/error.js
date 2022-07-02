@@ -1,4 +1,4 @@
-module.exports = (err, _req, res, _next) => {
+/* module.exports = (err, _req, res, _next) => {
   if (err.isJoi) {
     return res.status(400)
       .json({ error: { message: err.details[0].message } });
@@ -19,4 +19,12 @@ module.exports = (err, _req, res, _next) => {
 
   // Caso não seja um erro de domínio, enviamos uma resposta de erro desconhecido.
   return res.status(500).json({ error: { code: 'internal', message: 'Internal server error' } });
-};
+}; */
+class NotFoundError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'NotFoundError';
+  }
+}
+
+module.exports = NotFoundError;

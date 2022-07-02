@@ -16,17 +16,7 @@ const findById = async (req, res, _next) => {
 
 const createProduct = async (req, res) => {
   const { name } = req.body;
-/*   const schema = Joi.object({
-    name: Joi.string().min(5).required().messages({
-      'any.required': '400|"name is required"',
-      'string.min': '422|"name length must be at least 5 characters long"',
-    }),
-  });
-  const { error } = schema.validate(name);
-  if (error) {
-    const [code, message] = error.message.split('|');
-    return res.status(parseInt(code, 10)).json({ message });
-  } */
+
   if (!name) res.status(400).json({ message: '"name" is required' });
   if (name.length < 5) {
     res.status(422).json({ message: '"name" length must be at least 5 characters long' });
@@ -38,8 +28,17 @@ const createProduct = async (req, res) => {
   res.status(201).json(item);
 };
 
+const remove = async (req, res) => {
+  const { id } = req.params;
+  await Product.checkIfExistsId(id);
+  await Product.movieService.validateParamsId({ id });
+  await Product.remove(id);
+  res.status(204).end();
+};
+
 module.exports = {
   getAll,
   findById,
   createProduct,
+  remove,
 };

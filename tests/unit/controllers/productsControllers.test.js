@@ -2,8 +2,8 @@ const { expect, use } = require('chai');
 const { ValidationError } = require('joi');
 const chaiAsPromised = require('chai-as-promised')
 const sinon = require('sinon');
-const productController = require('../../controllers/productsControllers');
-const productServices = require('../../services/productsServices')
+const productController = require('../../../controllers/productsControllers');
+const productServices = require('../../../services/productsServices')
 
 require('express-async-errors');
 

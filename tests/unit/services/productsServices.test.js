@@ -3,8 +3,8 @@ const sinon = require('sinon');
 /* const NotFoundError = require('../../errors/NotFoundError'); */
 const chaiAsPromised = require('chai-as-promised')
 
-const productsServices = require('../../services/productsServices');
-const productsModels = require('../../models/productsModels');
+const productsServices = require('../../../services/productsServices');
+const productsModels = require('../../../models/productsModels');
 
 use(chaiAsPromised);
 

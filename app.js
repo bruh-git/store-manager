@@ -20,5 +20,6 @@ app.use(bodyParser.json());
 app.get('/products', rescue(Product.getAll));
 app.get('/products/:id', rescue(Product.findById));
 app.post('/products', rescue(Product.createProduct));
+app.delete('/products/:id', rescue(Product.remove));
 
 module.exports = app;
