@@ -53,8 +53,8 @@ const validate = async (data) => {
     throw error;
   }
 };
+
 const createProduct = async (name) => {
-  validate(name);
   const newProduct = await Product.createProduct(name);
 
   return newProduct;
