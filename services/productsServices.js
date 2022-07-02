@@ -1,5 +1,5 @@
-/* const Joi = require('joi');
-const { runSchema } = require('./validators'); */
+const Joi = require('joi');
+/* const { runSchema } = require('./validators');  */
 const Product = require('../models/productsModels');
 
 const getAll = async () => Product.getAll();
@@ -17,25 +17,6 @@ const findById = async (productId) => {
   return product;
 };
 
-/* const productService = {
-  validateParams: runSchema(Joi.object({
-    name: Joi.string()
-      .min(5).not().empty()
-      .required(),
-  })),
-
-  async checkIfExists(id) {
-    const exists = await Product.checkIfExists(id);
-    if (!exists) {
-      return {
-        error: {
-          code: 'Unprocessable Entity',
-          message: 'Product already exists',
-        },
-      };
-    }
-  },
-}; */
 /*   const { error } = Joi.object({
     name: Joi.string()
       .min(5).not().empty()
@@ -62,7 +43,18 @@ const checkIfExists = async (name) => {
   }
 };
 
+const validate = async (data) => {
+  const schema = Joi.object({
+    name: Joi.string().min(5).required() });
+  const { error } = schema.validate(data);
+
+  if (error) {
+    if (error.details[0].type === 'string.min') error.code = 422;
+    throw error;
+  }
+};
 const createProduct = async (name) => {
+  validate(name);
   const newProduct = await Product.createProduct(name);
 
   return newProduct;
@@ -73,4 +65,5 @@ module.exports = {
   findById,
   createProduct,
   checkIfExists,
+  validate,
 };

@@ -14,16 +14,17 @@ const findById = async (req, res, _next) => {
   res.status(404).json({ message: 'Product not found' });
 };
 
-const createProduct = async (req, res, _next) => {
+const createProduct = async (req, res) => {
   const { name } = req.body;
 
+  if (!name) res.status(400).json({ message: '"name" is required' });
+  if (name.length < 5) {
+    return res.status(422).json({ message: '"name" length must be at least 5 characters long' });
+  }
+  await Product.validate({ name });
   await Product.checkIfExists(name);
   const id = await Product.createProduct(name);
   const item = await Product.findById(id);
-  if (!name) res.status(400).json({ message: 'name is required' });
-  if (name.length < 5) {
-    return res.status(422).json({ message: 'name length must be at least 5 characters long' });
-  }
   res.status(201).json(item);
 };
 
