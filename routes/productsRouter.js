@@ -7,7 +7,7 @@ const router = Router();
 
 router.get('/', rescue(productController.list));
 router.post('/', rescue(productController.create));
-router.get('/:id', productController.findById);
-/* router.delete('/products/:id', rescue(productController.remove)); */
+router.get('/:id', rescue(productController.findById));
+router.delete('/:id', rescue(productController.delete));
 
 module.exports = router;

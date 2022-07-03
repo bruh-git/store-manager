@@ -14,41 +14,31 @@ const productModel = {
     return rows;
   },
   findById: async (id) => {
-    const query = 'SELECT * FROM StoreManager.products WHERE id= ?';
+    const query = 'SELECT * FROM StoreManager.products WHERE id=?';
     const [[product]] = await connection.execute(query, [id]);
 
     return product;
   },
   checkIfExists: async (name) => {
-    const sql = 'SELECT * FROM StoreManager.products WHERE name = ?';
+    const sql = 'SELECT * FROM StoreManager.products WHERE name=?';
     const [[item]] = await connection.execute(sql, [name]);
     return !!item;
   },
-};
-
-/* 
-
-const checkIfExistsId = async (id) => {
-  const sql = 'SELECT * FROM StoreManager.products WHERE id = ?';
-  const [[item]] = await connection.execute(sql, [id]);
-  return !!item;
-};
-
-const remove = async (id) => {
-  const sql = `
-      DELETE FROM StoreManager.products
-      WHERE id = ?
-    `;
-  await connection.query(sql, [id]);
-};
-
-const edit = async (id, changes) => {
-  const sql = `
+  edit: async (id, changes) => {
+    const sql = `
       UPDATE StoreManager.products
       SET ? 
       WHERE id = ?
     `;
-  await connection.query(sql, [changes, id]);
-}; */
+    await connection.query(sql, [changes, id]);
+  },
+  delete: async (id) => {
+    const sql = `
+      DELETE FROM StoreManager.products
+      WHERE id = ?
+    `;
+    await connection.query(sql, [id]);
+  },
+};
 
 module.exports = productModel;

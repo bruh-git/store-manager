@@ -23,12 +23,16 @@ const productService = {
         .empty(),
     });
     const { error, value } = schema.validate(params);
-    if (error) throw error;
 
+    if (error) {
+      if (error.details[0].type === 'string.min') error.code = 422;
+      throw error;
+    }
     return value;
   },
 
   create: async ({ name }) => {
+    await productModel.checkIfExists({ name });
     const id = await productModel.create({ name });
     return id;
   },
@@ -39,22 +43,33 @@ const productService = {
   },
   
   findById: async (id) => {
+    if (!id) {
+      return {
+        error: {
+          code: 'notFound',
+          message: 'Product not found',
+        },
+      };
+    }
     const product = await productModel.findById(id);
     return product;
   },
-  checkIfExists: async (name) => {
-    const exists = await productModel.checkIfExists(name);
-    if (exists) {
-      /* throw new Error(); */
-      return {
+  delete: async (id) => {
+    await productModel.delete(id);
+  },
+};
+  // checkIfExists: async (name) => {
+   // const exists = await productModel.checkIfExists(name);
+    // if (exists) {
+      // throw new Error();
+      /* return {
         error: {
           code: 'Unprocessable Entity',
           message: 'Product already exists',
         },
-      };
-    }
-  },
-};
+      }; */
+    // }
+  // },
 
 /* 
 const findById = async (productId) => {

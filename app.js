@@ -19,10 +19,10 @@ app.use('/products', productsRouter);
 
 app.use((err, _req, res, _next) => {
   switch (err.name) {
-    case 'UnprocessableEntity': res.status(422).json({ message: err.message }); break;
-    case 'ValidationError': res.status(400).json({ message: err.message }); break;
-    case 'NotFoundError': res.status(404).json({ message: err.message });
-    break;
+    case 'ValidationError':
+      return res.status(err.code || 400).json({ message: err.message });
+    case 'NotFoundError':
+      return res.status(404).json({ message: err.message });
     default: res.sendStatus(500);
   }
 });
