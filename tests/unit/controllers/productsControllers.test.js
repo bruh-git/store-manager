@@ -70,7 +70,7 @@ describe('productController',() => {
       expect(res.status.calledWith(200)).to.be.true;
       expect(res.json.calledWith(mockObj)).to.be.true;
     });
-    it('se mandar o id como string deve chamar o res.sendStatus com 405', async () => {
+    it('se mandar o id como string deve chamar o res.sendStatus com 404', async () => {
       const req = {};
       const res = {};
 
@@ -80,6 +80,16 @@ describe('productController',() => {
 
       expect(productController.findById(req, res)).to.
         eventually.rejectedWith(ValidationError);
+    })
+    it('se mandar o name como string deve chamar o res.sendStatus com 400', async () => {
+      const req = {};
+      const res = {};
+      
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub();
+      req.body = {}
+      
+      expect(productController.findById(req, res)).to.eventually.rejectedWith(ValidationError);
     })
   })
   describe('#delete', () => {
@@ -100,70 +110,8 @@ describe('productController',() => {
       expect(res.send.called).to.be.true;
     });
   });
-})
-
-/* describe('Ao chamar o controller de create', () => {
-  describe('quando o payload informado não é válido', () => {
-    const res = {};
-    const req = {};
-
-    req.body = {};
-
-    res.status = sinon.stub()
-        .returns(res);
-    res.send = sinon.stub()
-        .returns();
-
-    sinon.stub(productService, 'create').resolves(false);
-
-    it('é chamado o status com o código 400', async () => {
-      await productController.create(req, res);
-
-      expect(res.status.calledWith(400)).to.be.equal(true);
-    });
-
-    it('é chamado o send com a mensagem "name is required"', async () => {
-      await productController.create(req, res);
-
-      expect(res.send.calledWith('name is required')).to.be.equal(true);
-    });
-
-  });
-}) */
-/*
-  describe('productController', function () {
-    beforeEach(() => {
-      sinon.restore();
-    });
-
-    it('ao tentar editar um id inválido', async function () {
-      const req = {};
-      const res = {};
-
-      res.status = sinon.stub().returns(res);
-      res.json = sinon.stub();
-
-      req.params = { id: 'teste' };
-
-      expect(productController.createProduct(req, res))
-        .to.be.rejectedWith(ValidationError);
-    });
-
-    it('ao tentar editar com um body inválido', async function () {
-      const req = {};
-      const res = {};
-
-      res.status = sinon.stub().returns(res);
-      res.json = sinon.stub();
-
-      req.params = { id: 1 };
-      req.body = {};
-
-      expect(productController.createProduct(req, res))
-        .to.be.rejectedWith(ValidationError);
-    });
-
-    it('ao tentar editar com um id e um body válido', async function () {
+  describe('#edit', () => {
+    it('ao tentar editar com um id e um body válido', async () => {
       const req = {};
       const res = {};
 
@@ -172,42 +120,14 @@ describe('productController',() => {
       res.json = sinon.stub();
 
       req.params = { id: 1 };
-      req.body = { name: 'Tarantino' };
+      req.body = { name: 'Martelo de Thor' };
 
-      sinon.stub(productServices, 'edit').resolves(true);
+      sinon.stub(productService, 'edit').resolves();
 
-      await productController.createProduct(req, res);
+      await productController.edit(req, res);
 
-      expect(res.status.calledWith(204)).to.be.equal(true);
-      expect(res.json.calledWith({ ok: true })).to.be.equal(true);
+      expect(res.status.calledWith(200)).to.be.true;
+      expect(res.json.called).to.be.true;
     });
   });
-  describe('quando é inserido com sucesso', () => {
-    const response = {}; const request = {};
-
-    before(() => {
-      request.body = {
-        name: 'Example product',
-      };
-
-      response.status = sinon.stub()
-        .returns(response);
-      response.send = sinon.stub()
-        .returns();
-
-      sinon.stub(productServices, 'createProduct')
-        .resolves(true);
-    });
-
-    after(() => {
-      productServices.createProduct.restore();
-    });
-
-    it('é chamado o status com o código 201', async () => {
-      await productController.createProduct(request, response);
-
-      expect(response.status.calledWith(201)).to.be.equal(true);
-    });
-
-  });
-}); */
+})

@@ -32,20 +32,18 @@ const productController = {
     /* res.sendStatus(204); */
     /* res.status(204).end(); */
   },
+  edit: async (req, res) => {
+    const { id } = req.params;
+    const { name } = req.body;
+    const idValid = await productService.findById(id);
+
+    if (!idValid) res.status(404).json({ message: 'Product not found' });
+    await productService.validateBody({ name });
+
+    const product = await productService.edit(id, { name });
+
+    res.status(200).json(product);
+  },
 };
-
-/* createProduct: async (req, res) => {
-  const { name } = req.body;
-
-  if (!name) res.status(400).json({ message: '"name" is required' });
-  if (name.length < 5) {
-    res.status(422).json({ message: '"name" length must be at least 5 characters long' });
-  }
-  await productService.validate({ name });
-  await productService.checkIfExists(name);
-  const id = await productService.createProduct(name);
-  const item = await productService.findById(id);
-  res.status(201).json(item);
-}, */
 
 module.exports = productController;

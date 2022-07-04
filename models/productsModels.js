@@ -24,14 +24,14 @@ const productModel = {
     const [[item]] = await connection.execute(sql, [name]);
     return !!item;
   },
-  /* edit: async (id, changes) => {
+  edit: async (id, changes) => {
     const sql = `
       UPDATE StoreManager.products
       SET ? 
       WHERE id = ?
     `;
     await connection.query(sql, [changes, id]);
-  }, */
+  },
   delete: async (id) => {
     const sql = `
       DELETE FROM StoreManager.products

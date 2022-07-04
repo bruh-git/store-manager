@@ -49,68 +49,31 @@ describe('Products,', () => {
       expect(product).to.be.undefined;
     });
   })
-});
-
-/* describe('Insere um novo produto no BD', () => {
-  const payloadMovie = {
-    name: 'Example Product',
-  };
-
-  before(async () => {
-    const execute = [{ insertId: 1 }]; // retorno esperado nesse teste
-
-    sinon.stub(connection, 'execute').resolves(execute);
-  });
-
-  after(async () => {
-    connection.execute.restore();
-  });
-
-  describe('quando é inserido com sucesso', async () => {
-
-    it('retorna um objeto', async () => {
-      const response = await productsModels.createProduct(payloadMovie);
-
-      expect(response).to.be.a('object');
-    });
-
-    it('tal objeto possui o "id" do novo filme inserido', async () => {
-      const response = await productsModels.createProduct(payloadMovie);
-
-      expect(response).to.have.a.property('id');
-    });
-
-  });
-});
-
-  describe('productModel', function () {
-    beforeEach(function () {
-      sinon.restore();
-    });
-
-  describe('#exists', function () {
-    it('ao mandar um id de um registro que existe deve retornar `true`', async function () {
-      sinon.stub(connection, 'query').resolves([[{ id: 1, name: 'Quentin Tarantino' }]]);
-      const exists = await productsModels.checkIfExists(1);
-      expect(exists).to.be.equal(true);
-    });
-
-    it('ao mandar um id de um registro que não existe deve retornar `false`', async function () {
+  describe('#exists', () => {
+    it('ao mandar um id de um registro que não existe deve retornar `false`', async () => {
       sinon.stub(connection, 'query').resolves([[]]);
-      const exists = await productsModels.checkIfExists(1001);
+      const exists = await productModel.checkIfExists(1001);
       expect(exists).to.be.equal(false);
     });
   });
 
-  describe('#edit', function () {
-      it('deve ser capaz de editar se mandar um id e um objeto', async function () {
-        sinon.stub(connection, 'query').resolves([{ affectedRows: 1 }]);
-        const value = await productsModels.edit(1, { name: 'Quentin Tarantino' });
-        expect(value).to.be.eq(true);
+  describe('#edit', () => {
+    it('deve ser capaz de editar se mandar um id e um objeto', async () =>{
+        sinon.stub(connection, 'query').resolves(1);
+        const value = await productModel.edit(1, { name: 'Martelo' });
+      expect(value).to.be.undefined;
       });
+  });
+  describe('#delete', () => {
+    it('deve ser capaz de deletar se mandar um id e um objeto', async () => {
+      sinon.stub(connection, 'query').resolves(1);
+      const value = await productModel.delete(1, { name: 'Martelo' });
+      expect(value).to.be.undefined;
     });
+  });
+});
 
-  describe('Busca apenas um filme no BD por seu ID', () => {
+/*   describe('Busca apenas um filme no BD por seu ID', () => {
     before(async () => {
       const execute = [[]];
 
@@ -119,16 +82,16 @@ describe('Products,', () => {
 
     after(async () => {
       connection.execute.restore();
-    });
+    }); */
 
-    describe('quando não existe um filme com o ID informado', () => {
+/*     describe('quando não existe um filme com o ID informado', () => {
       it('retorna null', async () => {
         const response = await MoviesModel.getByProductId();
         expect(response).to.be.equal(null);
       });
-    });
+    }); */
 
-    describe('quando existe um filme com o ID informado', () => {
+/*     describe('quando existe um filme com o ID informado', () => {
 
       before(() => {
         sinon.stub(productsModels, 'getByProductId')
@@ -162,6 +125,4 @@ describe('Products,', () => {
         expect(item).to.include.all.keys('id', 'name');
       });
     });
-  });
-
-}); */
+  }); */

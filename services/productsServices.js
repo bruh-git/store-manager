@@ -57,6 +57,10 @@ const productService = {
   delete: async (id) => {
     await productModel.delete(id);
   },
+  edit: async (id, changes) => {
+    await productModel.edit(id, changes);
+    return { id, ...changes };
+  },
 };
   // checkIfExists: async (name) => {
    // const exists = await productModel.checkIfExists(name);
