@@ -70,23 +70,6 @@ describe('productController',() => {
       expect(res.status.calledWith(200)).to.be.true;
       expect(res.json.calledWith(mockObj)).to.be.true;
     });
-
-/*     it('deve chamar res.sendStatus com 404 quando o service retornar nulo', async () => {
-      sinon.stub(productService, 'findById').resolves(null);
-
-      const req = {};
-      const res = {};
-
-      res.sendStatus = sinon.stub();
-
-
-      req.params = { id: 1001 };
-
-      await productController.findById(req, res);
-
-      expect(res.sendStatus.calledWith(404)).to.be.true;
-    }); */
-
     it('se mandar o id como string deve chamar o res.sendStatus com 405', async () => {
       const req = {};
       const res = {};
@@ -106,7 +89,7 @@ describe('productController',() => {
       req.params = { id: 1 };
 
       res.status = sinon.stub().returns(res);
-      res.end = sinon.stub();
+      res.send = sinon.stub();
 
       sinon.stub(productModel, 'checkIfExists').resolves();
       sinon.stub(productService, 'delete').resolves();
@@ -114,45 +97,40 @@ describe('productController',() => {
       await productController.delete(req, res);
 
       expect(res.status.calledWith(204)).to.be.true;
+      expect(res.send.called).to.be.true;
     });
   });
 })
 
 /* describe('Ao chamar o controller de create', () => {
   describe('quando o payload informado não é válido', () => {
-    const response = {};
-    const request = {};
+    const res = {};
+    const req = {};
 
-    before(() => {
-      request.body = {};
+    req.body = {};
 
-      response.status = sinon.stub()
-        .returns(response);
-      response.send = sinon.stub()
+    res.status = sinon.stub()
+        .returns(res);
+    res.send = sinon.stub()
         .returns();
 
-      sinon.stub(productsServices, 'createProduct')
-        .resolves(false);
-    });
-
-    after(() => {
-      productsServices.createProduct.restore();
-    });
+    sinon.stub(productService, 'create').resolves(false);
 
     it('é chamado o status com o código 400', async () => {
-      await productController.createProduct(request, response);
+      await productController.create(req, res);
 
-      expect(response.status.calledWith(400)).to.be.equal(true);
+      expect(res.status.calledWith(400)).to.be.equal(true);
     });
 
     it('é chamado o send com a mensagem "name is required"', async () => {
-      await productController.createProduct(request, response);
+      await productController.create(req, res);
 
-      expect(response.send.calledWith('name is required')).to.be.equal(true);
+      expect(res.send.calledWith('name is required')).to.be.equal(true);
     });
 
   });
-
+}) */
+/*
   describe('productController', function () {
     beforeEach(() => {
       sinon.restore();
