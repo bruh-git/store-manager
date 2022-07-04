@@ -5,6 +5,7 @@ const sinon = require('sinon');
 const productController = require('../../../controllers/productsControllers');
 const productService = require('../../../services/productsServices');
 const { listMock, mockObj } = require('../mocks/product.mock');
+const productModel = require('../../../models/productsModels');
 
 require('express-async-errors');
 
@@ -98,6 +99,23 @@ describe('productController',() => {
         eventually.rejectedWith(ValidationError);
     })
   })
+  describe('#delete', () => {
+    it('status 204', async () => {
+      const req = {};
+      const res = {};
+      req.params = { id: 1 };
+
+      res.status = sinon.stub().returns(res);
+      res.end = sinon.stub();
+
+      sinon.stub(productModel, 'checkIfExists').resolves();
+      sinon.stub(productService, 'delete').resolves();
+
+      await productController.delete(req, res);
+
+      expect(res.status.calledWith(204)).to.be.true;
+    });
+  });
 })
 
 /* describe('Ao chamar o controller de create', () => {

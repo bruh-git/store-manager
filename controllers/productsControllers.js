@@ -28,7 +28,7 @@ const productController = {
     if (!product) res.status(404).json({ message: 'Product not found' });
     
     await productService.delete(id);
-    res.sendStatus(204);
+    res.status(204).end();
   },
 };
 
