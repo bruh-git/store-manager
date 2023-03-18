@@ -1,10 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-/* const rescue = require('express-rescue'); */
+
 const app = express();
 app.use(bodyParser.json());
 
 const productsRouter = require('./routes/productsRouter');
+const salesRouter = require('./routes/salesRouter');
 /* const errorMiddleware = require('./middlewares/error'); */
 
 // não remova esse endpoint, é para o avaliador funcionar
@@ -16,6 +17,7 @@ app.get('/', (_request, response) => {
 // você deve usar o arquivo index.js para executar sua aplicação 
 
 app.use('/products', productsRouter);
+app.use('/sales', salesRouter);
 
 app.use((err, _req, res, _next) => {
   switch (err.name) {
